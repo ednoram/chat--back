@@ -11,8 +11,14 @@
     "outDir": ".build",
     "baseUrl": ".",
     "paths": {
+      "@io": ["src/io"],
       "@utils": ["src/utils"],
-      "@config": ["src/config"]
+      "@types": ["src/types"],
+      "@config": ["src/config"],
+      "@models": ["src/models"],
+      "@routes": ["src/routes"],
+      "@middleware": ["src/middleware"],
+      "@controllers": ["src/controllers"]
     },
     "plugins": [
       {
