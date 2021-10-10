@@ -9,7 +9,7 @@ const authorize = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const authorizationHeader = req.headers.Authorization;
+    const authorizationHeader = req.headers.authorization;
     const token = authorizationHeader && String(authorizationHeader);
 
     if (!token) {
