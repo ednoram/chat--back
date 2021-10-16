@@ -7,8 +7,8 @@ import { createServer } from "http";
 import { PORT } from "@config";
 import { configureIo } from "@io";
 import { connectDB } from "@utils";
-import { userRoutes } from "@routes";
 import { authorize } from "@middleware";
+import { roomsRoutes, userRoutes } from "@routes";
 
 connectDB();
 
@@ -21,6 +21,7 @@ app.use(cors({ origin: true, credentials: true }));
 
 app.use("/api", authorize);
 app.use("/api/user", userRoutes);
+app.use("/api/rooms", roomsRoutes);
 
 const io = new Server(httpServer, { cors: { origin: true } });
 
