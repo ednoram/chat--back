@@ -8,12 +8,14 @@ const postRoom = async (req: Request, res: Response): Promise<void> => {
     const { name } = req.body;
     const user = req.user;
 
+    const processedName = name.trim().replace(/ +(?= )/g, "");
+
     if (!user) {
       res.status(403).json({ errors: ["Not authorized"] });
       return;
     }
 
-    const foundRoom = await Room.findOne({ name });
+    const foundRoom = await Room.findOne({ name: processedName });
 
     if (foundRoom) {
       res
@@ -24,11 +26,12 @@ const postRoom = async (req: Request, res: Response): Promise<void> => {
 
     const newRoom = new Room({
       adminId: user._id,
-      name: name.trim().replace(/ +(?= )/g, ""),
+      name: processedName,
     });
-    const data = await newRoom.save();
 
-    res.status(200).json(data);
+    const savedRoom = await newRoom.save();
+
+    res.status(200).json(savedRoom);
   } catch (err) {
     const message = getErrorMessage(err);
     res.status(500).json({ errors: [message] });
