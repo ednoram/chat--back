@@ -1,25 +1,25 @@
 import { Schema, model } from "mongoose";
 
-const RoomSchema = new Schema(
+const MessageSchema = new Schema(
   {
-    name: {
+    text: {
       type: String,
       unique: true,
       required: true,
     },
-    adminId: {
+    username: {
       type: String,
       required: true,
     },
-    password: {
+    roomId: {
       type: String,
       required: true,
     },
   },
   {
     timestamps: true,
-    collection: "rooms",
+    collection: "messages",
   }
 );
 
-export default model("Room", RoomSchema);
+export default model("Message", MessageSchema);

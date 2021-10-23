@@ -7,7 +7,15 @@ import { getErrorMessage } from "@utils";
 const getRooms = async (_req: Request, res: Response): Promise<void> => {
   try {
     const rooms: IRoom[] = await Room.find();
-    const sortedRooms = rooms.sort((a, b) => a.name.localeCompare(b.name));
+
+    const sortedRooms = rooms
+      .map((room) => ({
+        _id: room._id,
+        name: room.name,
+        adminId: room.adminId,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+
     res.status(200).json(sortedRooms);
   } catch (err) {
     const message = getErrorMessage(err);

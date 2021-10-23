@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { Room } from "@models";
+import { Message, Room } from "@models";
 import { getErrorMessage } from "@utils";
 
 const deleteRoom = async (req: Request, res: Response): Promise<void> => {
@@ -24,6 +24,8 @@ const deleteRoom = async (req: Request, res: Response): Promise<void> => {
       res.status(403).json({ errors: ["You are not the admin of this room"] });
       return;
     }
+
+    await Message.deleteMany({ roomId: id });
 
     await Room.findOneAndDelete({ _id: id });
 

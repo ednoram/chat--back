@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 
 import { Room } from "@models";
-import { getErrorMessage } from "@utils";
+import { getErrorMessage, hashPassword } from "@utils";
 
 const postRoom = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { name } = req.body;
+    const { name, password } = req.body;
     const user = req.user;
 
     const processedName = name.trim().replace(/ +(?= )/g, "");
@@ -24,9 +24,17 @@ const postRoom = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    if (password.includes(" ")) {
+      res.status(422).json({ errors: ["Password can not contain spaces"] });
+      return;
+    }
+
+    const hashedPassword = await hashPassword(password);
+
     const newRoom = new Room({
       adminId: user._id,
       name: processedName,
+      password: hashedPassword,
     });
 
     const savedRoom = await newRoom.save();

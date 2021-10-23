@@ -14,6 +14,9 @@ router.post(
   body("name")
     .isLength({ min: 4, max: 16 })
     .withMessage("Room name must be 4-16 characters long"),
+  body("password")
+    .isLength({ min: 8, max: 16 })
+    .withMessage("Password must be 8-16 characters long"),
   validate,
   postRoom
 );
