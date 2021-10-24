@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { isValidObjectId } from "mongoose";
 
 import { Room, Message } from "@models";
 import { getErrorMessage } from "@utils";
@@ -9,7 +10,12 @@ const postMessage = async (req: Request, res: Response): Promise<void> => {
     const user = req.user;
 
     if (!user) {
-      res.status(403).json({ errors: ["Not authorized"] });
+      res.status(401).json({ errors: ["Not authorized"] });
+      return;
+    }
+
+    if (!isValidObjectId(roomId)) {
+      res.status(400).json({ errors: ["Invalid room ID"] });
       return;
     }
 

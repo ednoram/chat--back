@@ -11,7 +11,7 @@ const postRoom = async (req: Request, res: Response): Promise<void> => {
     const processedName = name.trim().replace(/ +(?= )/g, "");
 
     if (!user) {
-      res.status(403).json({ errors: ["Not authorized"] });
+      res.status(401).json({ errors: ["Not authorized"] });
       return;
     }
 
@@ -25,7 +25,7 @@ const postRoom = async (req: Request, res: Response): Promise<void> => {
     }
 
     if (password.includes(" ")) {
-      res.status(422).json({ errors: ["Password can not contain spaces"] });
+      res.status(400).json({ errors: ["Password must not contain spaces"] });
       return;
     }
 

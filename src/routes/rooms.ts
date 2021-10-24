@@ -1,8 +1,14 @@
 import { Router } from "express";
 import { body } from "express-validator";
 
+import {
+  getRoom,
+  getRooms,
+  postRoom,
+  deleteRoom,
+  updateRoom,
+} from "@controllers";
 import { validate } from "@middleware";
-import { getRoom, deleteRoom, getRooms, postRoom } from "@controllers";
 
 const router = Router();
 
@@ -19,6 +25,16 @@ router.post(
     .withMessage("Password must be 8-16 characters long"),
   validate,
   postRoom
+);
+
+router.patch(
+  "/:id",
+  body("currentPassword").exists().withMessage("Current Password is required"),
+  body("newPassword")
+    .isLength({ min: 8, max: 16 })
+    .withMessage("New password must be 8-16 characters long"),
+  validate,
+  updateRoom
 );
 
 router.delete("/:id", deleteRoom);

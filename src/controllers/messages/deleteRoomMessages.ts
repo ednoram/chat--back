@@ -1,12 +1,16 @@
 import { Request, Response } from "express";
+import bcrypt from "bcrypt";
 import { isValidObjectId } from "mongoose";
 
-import { Message, Room } from "@models";
+import { Room, Message } from "@models";
 import { getErrorMessage } from "@utils";
 
-const deleteRoom = async (req: Request, res: Response): Promise<void> => {
+const deleteRoomMessages = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
-    const { id } = req.params;
+    const { roomId, roomPassword } = req.body;
     const user = req.user;
 
     if (!user) {
@@ -14,12 +18,12 @@ const deleteRoom = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    if (!isValidObjectId(id)) {
+    if (!isValidObjectId(roomId)) {
       res.status(400).json({ errors: ["Invalid room ID"] });
       return;
     }
 
-    const room = await Room.findOne({ _id: id });
+    const room = await Room.findOne({ _id: roomId });
 
     if (!room) {
       res.status(404).json({ errors: ["Room not found"] });
@@ -31,9 +35,14 @@ const deleteRoom = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    await Message.deleteMany({ roomId: id });
+    const passwordIsCorrect = await bcrypt.compare(roomPassword, room.password);
 
-    await Room.findOneAndDelete({ _id: id });
+    if (!passwordIsCorrect) {
+      res.status(403).json({ errors: ["Password is incorrect"] });
+      return;
+    }
+
+    await Message.deleteMany({ roomId });
 
     res.status(200).json({ success: true });
   } catch (err) {
@@ -42,4 +51,4 @@ const deleteRoom = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export default deleteRoom;
+export default deleteRoomMessages;
