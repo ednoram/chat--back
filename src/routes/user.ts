@@ -1,8 +1,14 @@
 import { Router } from "express";
 import { body } from "express-validator";
 
+import {
+  login,
+  getUsers,
+  register,
+  updateUser,
+  loginWithToken,
+} from "@controllers";
 import { validate } from "@middleware";
-import { login, register, getUsers, loginWithToken } from "@controllers";
 
 const router = Router();
 
@@ -32,6 +38,19 @@ router.post(
   body("password").exists().withMessage("Password is required"),
   validate,
   login
+);
+
+router.patch(
+  "/",
+  body("currentPassword").exists().withMessage("Current password is required"),
+  body("newPassword")
+    .isLength({ min: 8, max: 16 })
+    .withMessage("Password must be 8-16 characters long"),
+  body("passwordConfirmation")
+    .custom((value, { req }) => value === req.body.newPassword)
+    .withMessage("Passwords do not match"),
+  validate,
+  updateUser
 );
 
 export default router;

@@ -24,7 +24,7 @@ const updateRoom = async (req: Request, res: Response): Promise<void> => {
     }
 
     if (!user) {
-      res.status(403).json({ errors: ["Not authorized"] });
+      res.status(401).json({ errors: ["Not authorized"] });
       return;
     }
 
