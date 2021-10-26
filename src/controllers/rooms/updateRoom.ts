@@ -7,9 +7,9 @@ import { getErrorMessage, hashPassword } from "@utils";
 
 const updateRoom = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { currentPassword, newPassword } = req.body;
-    const { id } = req.params;
     const user = req.user;
+    const { id } = req.params;
+    const { currentPassword, newPassword } = req.body;
 
     if (!isValidObjectId(id)) {
       res.status(400).json({ errors: ["Invalid room ID"] });

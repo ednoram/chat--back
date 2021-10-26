@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body } from "express-validator";
+import { body, query } from "express-validator";
 
 import {
   getRoom,
@@ -12,7 +12,17 @@ import { validate } from "@middleware";
 
 const router = Router();
 
-router.get("/", getRooms);
+router.get(
+  "/",
+  query("limit")
+    .isNumeric()
+    .withMessage("Limit is required and must be numeric"),
+  query("offset")
+    .isNumeric()
+    .withMessage("Offset is required and must be numeric"),
+  validate,
+  getRooms
+);
 router.get("/:id", getRoom);
 
 router.post(
@@ -29,7 +39,7 @@ router.post(
 
 router.patch(
   "/:id",
-  body("currentPassword").exists().withMessage("Current Password is required"),
+  body("currentPassword").exists().withMessage("Current password is required"),
   body("newPassword")
     .isLength({ min: 8, max: 16 })
     .withMessage("New password must be 8-16 characters long"),
@@ -37,6 +47,11 @@ router.patch(
   updateRoom
 );
 
-router.delete("/:id", deleteRoom);
+router.delete(
+  "/:id",
+  body("roomPassword").exists().withMessage("Room password is required"),
+  validate,
+  deleteRoom
+);
 
 export default router;
