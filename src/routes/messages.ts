@@ -9,6 +9,12 @@ const router = Router();
 router.get(
   "/",
   query("roomId").exists().withMessage("Room ID query is required"),
+  query("limit")
+    .isNumeric()
+    .withMessage("Limit is required and must be numeric"),
+  query("offset")
+    .isNumeric()
+    .withMessage("Offset is required and must be numeric"),
   validate,
   getMessages
 );

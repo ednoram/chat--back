@@ -4,7 +4,6 @@ const MessageSchema = new Schema(
   {
     text: {
       type: String,
-      unique: true,
       required: true,
     },
     username: {
