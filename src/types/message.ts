@@ -1,4 +1,5 @@
 interface IMessage {
+  _id?: string;
   text: string;
   roomId: string;
   createdAt: Date;

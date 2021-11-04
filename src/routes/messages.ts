@@ -1,8 +1,13 @@
 import { Router } from "express";
 import { body, query } from "express-validator";
 
+import {
+  getMessages,
+  postMessage,
+  deleteMessage,
+  deleteRoomMessages,
+} from "@controllers";
 import { validate } from "@middleware";
-import { deleteRoomMessages, getMessages, postMessage } from "@controllers";
 
 const router = Router();
 
@@ -35,6 +40,13 @@ router.delete(
   body("roomPassword").exists().withMessage("Room password is required"),
   validate,
   deleteRoomMessages
+);
+
+router.delete(
+  "/:id",
+  body("roomPassword").exists().withMessage("Room password is required"),
+  validate,
+  deleteMessage
 );
 
 export default router;
