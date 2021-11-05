@@ -24,16 +24,12 @@ A REST API for a chat app.
 - ES6
 - ESLint
 
-## Demo
-
-> <https://chat-ednoram.vercel.app/>
-
 ## Usage
 
 > Clone repository.
 
 ```sh
-git clone https://github.com/ednoram/chat--front.git
+git clone https://github.com/ednoram/chat--back.git
 ```
 
 > Run the following commands.
