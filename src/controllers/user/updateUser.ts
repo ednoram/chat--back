@@ -24,11 +24,6 @@ const updateUser = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    if (newPassword.includes(" ")) {
-      res.status(400).json({ errors: ["Password must not contain spaces"] });
-      return;
-    }
-
     const hashedPassword = await hashPassword(newPassword);
 
     await User.findOneAndUpdate(

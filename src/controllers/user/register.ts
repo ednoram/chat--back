@@ -7,18 +7,6 @@ const register = async (req: Request, res: Response): Promise<void> => {
   try {
     const { username, password } = req.body;
 
-    if (username.trim().includes(" ")) {
-      res.status(400).json({ errors: ["Username must not contain spaces"] });
-      return;
-    }
-
-    if (password.includes(" ")) {
-      {
-        res.status(400).json({ errors: ["Password must not contain spaces"] });
-        return;
-      }
-    }
-
     const foundUser = await User.findOne({ username });
 
     if (foundUser) {

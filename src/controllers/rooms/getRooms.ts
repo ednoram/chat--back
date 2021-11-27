@@ -18,26 +18,22 @@ const getRooms = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const rooms: IRoom[] = await Room.find();
+    const rooms: IRoom[] = await Room.find()
+      .select({
+        _id: 1,
+        name: 1,
+        adminId: 1,
+      })
+      .sort({ name: 1 });
 
-    const filteredRooms =
-      searchFilter && typeof searchFilter === "string"
-        ? rooms.filter((room) =>
-            room.name.toLowerCase().includes(searchFilter.trim().toLowerCase())
-          )
-        : rooms;
+    const nameFilter: string =
+      typeof searchFilter === "string" ? searchFilter.trim().toLowerCase() : "";
 
-    const processedRooms = filteredRooms.map((room) => ({
-      _id: room._id,
-      name: room.name,
-      adminId: room.adminId,
-    }));
-
-    const sortedRooms = processedRooms.sort((a, b) =>
-      a.name.localeCompare(b.name)
+    const filteredRooms: IRoom[] = rooms.filter((room) =>
+      room.name.toLowerCase().includes(nameFilter)
     );
 
-    const returnedRooms = sortedRooms.slice(
+    const returnedRooms: IRoom[] = filteredRooms.slice(
       Number(offset),
       Number(offset) + Number(limit)
     );

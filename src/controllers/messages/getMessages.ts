@@ -21,7 +21,7 @@ const getMessages = async (req: Request, res: Response): Promise<void> => {
 
     const room = await Room.findOne({ _id: roomId });
 
-    if (!room || !roomPassword) {
+    if (!room) {
       res.status(404).json({ errors: ["Room not found"] });
       return;
     }
@@ -32,20 +32,17 @@ const getMessages = async (req: Request, res: Response): Promise<void> => {
     );
 
     if (!passwordIsCorrect) {
-      res.status(403).json({ errors: ["Password is incorrect"] });
+      res.status(403).json({ errors: ["Room password is incorrect"] });
       return;
     }
 
-    const messages: IMessage[] = await Message.find({ roomId });
+    const messages: IMessage[] = await Message.find({ roomId }).sort({
+      createdAt: 1,
+    });
 
-    const sortedMessages = messages.sort(
-      (a, b) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-    );
-
-    const returnedMessages = sortedMessages.slice(
-      Math.max(0, sortedMessages.length - (Number(offset) + Number(limit))),
-      Math.min(sortedMessages.length, sortedMessages.length - Number(offset))
+    const returnedMessages = messages.slice(
+      Math.max(0, messages.length - (Number(offset) + Number(limit))),
+      Math.min(messages.length, messages.length - Number(offset))
     );
 
     res.status(200).json({
