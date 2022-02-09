@@ -9,7 +9,10 @@ const signJWT = (_id: string, username: string): string => {
       username,
       duration: TOKEN_EXPIRY_SECONDS,
     },
-    TOKEN_SECRET
+    TOKEN_SECRET,
+    {
+      expiresIn: TOKEN_EXPIRY_SECONDS,
+    }
   );
 };
 
