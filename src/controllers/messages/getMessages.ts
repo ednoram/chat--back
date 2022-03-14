@@ -9,16 +9,6 @@ const getMessages = async (req: Request, res: Response): Promise<void> => {
   try {
     const { roomId, roomPassword, offset, limit } = req.query;
 
-    if (
-      typeof Number(limit) !== "number" ||
-      typeof Number(offset) !== "number"
-    ) {
-      res.status(400).json({
-        errors: ["Offset and limit are required and must be numeric"],
-      });
-      return;
-    }
-
     const room = await Room.findOne({ _id: roomId });
 
     if (!room) {
